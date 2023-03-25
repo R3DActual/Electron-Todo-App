@@ -1,0 +1,54 @@
+const { ipcRenderer } = require('electron');
+const todoList = document.getElementById('todoList')
+const todoInput = document.getElementById('todoInput')
+const addBtn = document.getElementById('addBtn')
+const saveBtn = document.getElementById('saveBtn')
+const loadBtn = document.getElementById('loadBtn')
+
+let todos = []
+
+function renderTodos() {
+    todoList.innerHTML = ''
+    todos.forEach((todo, index) => {
+        const li = document.createElement('li')
+        li.innerHTML = `
+        <span>${todo}</span>
+        <button class="deleteBtn" data-index="${index}">Delete</button>
+        `
+        todoList.appendChild(li)
+    })
+}
+
+addBtn.addEventListener('click', (event) => {
+    event.preventDefault()
+    if (todoInput.value.trim() !== '') {
+        todos.push(todoInput.value.trim())
+        todoInput.value = ''
+        renderTodos()
+    }
+})
+
+todoList.addEventListener('click', (event) => {
+    if (event.target.classList.contains('deleteBtn')) {
+        const index = event.target.getAttribute('data-index')
+        todos.splice(index, 1)
+        renderTodos()
+    }
+})
+
+saveBtn.addEventListener('click', () => {
+    ipcRenderer.send('save-tasks', todos);
+});
+
+loadBtn.addEventListener('click', () => {
+    ipcRenderer.send('load-tasks');
+});
+
+ipcRenderer.on('tasks-loaded', (event, tasks) => {
+    todos = tasks;
+    renderTodos();
+});
+
+ipcRenderer.on('app-quit', () => {
+    console.log('App quit event received!')
+})
