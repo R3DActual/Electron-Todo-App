@@ -4,13 +4,28 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "npx electron-builder --win",
+    "pack": "npx electron-builder --dir",
+    "dist": "npx electron-builder"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {},
   "devDependencies": {
     "electron": "^23.2.0",
     "electron-builder": "^23.6.0"
+  },
+  "build": {
+    "appId": "com.example.todo-app",
+    "productName": "Todo App",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "path/to/icon.ico"
+    }
   }
 }
