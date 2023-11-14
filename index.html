@@ -4,24 +4,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electron Todo App</title>
+    <title>Electron Todo List - Made by R3DAct</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Todo App</h1>
-        <form>
-            <input type="text" id="todoInput" placeholder="Enter a todo">
-            <button type="submit" id="addBtn">Add</button>
-        </form>
-        <div class="todo-container">
-            <ul id="todoList"></ul>
-        </div>
-        <div class="button-container">
+        <header>
+            <h1>Todo List</h1>
+        </header>
+        <section>
+            <form>
+                <input type="text" id="todoInput" placeholder="Enter a todo task">
+                <button type="submit" id="addBtn">Add</button>
+            </form>
+            <div class="todo-container">
+                <ul id="todoList"></ul>
+            </div>
+        </section>
+        <footer class="button-container">
             <button id="saveBtn">Save</button>
             <button id="loadBtn">Load</button>
-        </div>
+        </footer>
     </div>
-
     <script src="renderer.js"></script>
-</body
+</body>

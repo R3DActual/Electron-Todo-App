@@ -63,23 +63,32 @@ ipcMain.on('save-tasks', (event, tasks) => {
     });
 });
 
-ipcMain.on('load-tasks', function(event) {
+ipcMain.on('load-tasks', function (event) {
     // Show an open dialog to let the user choose a file to load
-    dialog.showOpenDialog(mainWindow, {
-        defaultPath: app.getPath('documents'),
-        filters: [{
-            name: 'JSON Files',
-            extensions: ['json']
-        }]
-    }).then(result => {
-        if (!result.canceled) {
-            // Read the selected file and send the tasks back to the renderer process
-            const filePath = result.filePaths[0];
-            const fileData = fs.readFileSync(filePath, 'utf-8');
-            const tasks = JSON.parse(fileData);
-            event.sender.send('tasks-loaded', tasks);
-        }
-    }).catch(err => {
-        console.log(err);
-    });
+    dialog
+        .showOpenDialog(mainWindow, {
+            defaultPath: app.getPath('documents'),
+            filters: [
+                {
+                    name: 'JSON Files',
+                    extensions: ['json'],
+                },
+            ],
+        })
+        .then((result) => {
+            if (!result.canceled) {
+                // Read the selected file and send the tasks back to the renderer process
+                const filePath = result.filePaths[0];
+                try {
+                    const fileData = fs.readFileSync(filePath, 'utf-8');
+                    const tasks = JSON.parse(fileData);
+                    event.sender.send('tasks-loaded', tasks);
+                } catch (error) {
+                    event.sender.send('load-error', 'Error loading tasks. Please check the file format.');
+                }
+            }
+        })
+        .catch((err) => {
+            event.sender.send('load-error', 'An error occurred while loading tasks.');
+        });
 });

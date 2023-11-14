@@ -58,6 +58,21 @@ ipcRenderer.on('tasks-loaded', (event, tasks) => {
     renderTodos();
 });
 
+ipcRenderer.on('load-error', (event, errorMessage) => {
+    showErrorBox(errorMessage);
+});
+
 ipcRenderer.on('app-quit', () => {
     console.log('App quit event received!')
 })
+
+function showErrorBox(message) {
+    const errorBox = document.createElement('div');
+    errorBox.className = 'error-box';
+    errorBox.textContent = message;
+    document.body.appendChild(errorBox);
+
+    setTimeout(() => {
+        errorBox.remove();
+    }, 5000); // Remove the error box after 5 seconds
+}
