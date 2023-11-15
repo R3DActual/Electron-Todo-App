@@ -8,7 +8,6 @@ const saveBtn = document.getElementById('saveBtn');
 const loadBtn = document.getElementById('loadBtn');
 
 let todos = [];
-let unsavedChanges = false;
 
 function renderTodos() {
     unfinishedList.innerHTML = '';
@@ -82,11 +81,12 @@ saveBtn.addEventListener('click', () => {
 });
 
 loadBtn.addEventListener('click', () => {
-    if(todos.length > 0){
+    ipcRenderer.send('load-tasks');
+    /*if(todos.length > 0){
         promptSave();
     }else{
-        ipcRenderer.send('load-tasks');
-    }
+        
+    }*/
 });
 
 ipcRenderer.on('tasks-loaded', (event, tasks) => {
@@ -103,9 +103,9 @@ ipcRenderer.on('success', (event, sucMsg) => {
 });
 
 ipcRenderer.on('app-quit', () => {
-    if (todos.length > 0) {
+    /*if (todos.length > 0) {
         promptSave();
-    }
+    }*/
     console.log('App is quitting...');
 });
 
