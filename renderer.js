@@ -1,4 +1,4 @@
-const { ipcRenderer, dialog } = require('electron');
+const { ipcRenderer } = require('electron');
 
 const unfinishedList = document.getElementById('unfinishedList');
 const finishedList = document.getElementById('finishedList');
