@@ -50,6 +50,27 @@ app.on('activate', function() {
     }
 })
 
+ipcMain.on('prompt-save', (event, tasks) => {
+    dialog.showSaveDialog(mainWindow, {
+        defaultPath: app.getPath('documents', ''),
+        filters: [{
+            name: 'JSON Files',
+            extensions: ['json']
+        }]
+    }).then((result) => {
+        if(!result.canceled){
+            try{
+                fs.writeFileSync(result.filePath, JSON.stringify(tasks));
+                event.sender.send('success', `Tasks saved to ${result.filePath}`);
+            }catch(error){
+                event.sender.send('error', 'Error Saving tasks. Please check the file format.')
+            }
+        }
+    }).catch((err) => {
+        event.sender.send('error', 'An error occurred while saving the tasks.')
+    });
+});
+
 ipcMain.on('save-tasks', (event, tasks) => {
     dialog.showSaveDialog(mainWindow, {
         defaultPath: app.getPath('documents', 'tasks.json'),
@@ -61,12 +82,13 @@ ipcMain.on('save-tasks', (event, tasks) => {
         if(!result.canceled){
             try{
                 fs.writeFileSync(result.filePath, JSON.stringify(tasks));
+                event.sender.send('success', `Tasks saved to ${result.filePath}`);
             }catch(error){
-                event.sender.send('load-error', 'Error Saving tasks. Please check the file format.')
+                event.sender.send('error', 'Error Saving tasks. Please check the file format.')
             }
         }
     }).catch((err) => {
-        event.sender.send('load-error', 'An error occurred while saving the tasks.')
+        event.sender.send('error', 'An error occurred while saving the tasks.')
     });
 })
 
@@ -84,11 +106,16 @@ ipcMain.on('load-tasks', (event) => {
                 const fileData = fs.readFileSync(filePath, 'utf-8');
                 const tasks = JSON.parse(fileData);
                 event.sender.send('tasks-loaded', tasks);
+                event.sender.send('success', `Tasks loaded from ${filePath}`);
             }catch(error){
-                event.sender.send('load-error', 'Error loading tasks. Please check the file format.')
+                event.sender.send('error', 'Error loading tasks. Please check the file format.')
             }
         }
     }).catch((err) => {
-        event.sender.send('load-error', 'An error occurred while loading the tasks.')
+        event.sender.send('error', 'An error occurred while loading the tasks.')
     });
 });
+
+function saveTaks(){
+    
+}

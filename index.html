@@ -1,9 +1,9 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <title>Electron Todo List</title>
         <link rel="stylesheet" href="style.css">
     </head>
@@ -17,19 +17,15 @@
                     <input type="text" id="todoInput" placeholder="What needs to be done?">
                     <button type="submit" id="addBtn">Add</button>
                 </form>
-                <div class="todo-container">
-                    <ul id="todoList">
-                        <li>
-                            <input type="checkbox" data-index="1">
-                            <label>Seperate unfinished & finished task</label>
-                            <button data-index="1">Delete</button>
-                        </li>
-                        <li>
-                            <input type="checkbox" data-index="2">
-                            <label>Prompt a save before continuing message if tasks are detected</label>
-                            <button data-index="2">Delete</button>
-                        </li>
-                    </ul>
+                <div class="tasks-container">
+                    <div id="unfinishedTasks" class="tasks-section">
+                        <h2>Unfinished Tasks</h2>
+                        <ul id="unfinishedList"></ul>
+                    </div>
+                    <div id="finishedTasks" class="tasks-section">
+                        <h2>Finished Tasks</h2>
+                        <ul id="finishedList"></ul>
+                    </div>
                 </div>
                 <button id="saveBtn">Save</button>
                 <button id="loadBtn">Load</button>
