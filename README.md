@@ -14,7 +14,7 @@ npm start
 ## Usage
 The application is a simple todo list where you can add and delete tasks. To add a new task, simply type the task description in the input field and press the "Add Task" button. To delete a task, click the "Delete" button next to the task.
 
-To save your tasks to a file, click the "Save" button in the top right corner of the window. To load tasks from a file, click the "Load" button and select the file you want to load.
+To save your tasks to a file, click the "Save" button in the bottom left corner of the window. To load tasks from a file, click the "Load" button and select the file you want to load.
 
 ## Building
 To build the application for distribution, run:
