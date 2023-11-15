@@ -29,7 +29,7 @@ function createWindow() {
     });
 
     mainWindow.loadFile('index.html');
-    //mainWindow.removeMenu();
+    mainWindow.removeMenu();
 
     mainWindow.on('closed', function() {
         mainWindow = null;
