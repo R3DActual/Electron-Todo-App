@@ -1,49 +1,52 @@
-const {
-    ipcRenderer
-} = require('electron');
-const todoList = document.getElementById('todoList')
-const todoInput = document.getElementById('todoInput')
-const addBtn = document.getElementById('addBtn')
-const saveBtn = document.getElementById('saveBtn')
-const loadBtn = document.getElementById('loadBtn')
+const { ipcRenderer } = require('electron');
 
-let todos = []
+const todoList = document.getElementById('todoList');
+const todoInput = document.getElementById('todoInput');
+const addBtn = document.getElementById('addBtn');
+const saveBtn = document.getElementById('saveBtn');
+const loadBtn = document.getElementById('loadBtn');
 
-function renderTodos() {
-    todoList.innerHTML = ''
+let todos = [];
+
+function renderTodos(){
+    todoList.innerHTML = '';
+
     todos.forEach((todo, index) => {
-        const li = document.createElement('li')
+        const li = document.createElement('li');
         li.innerHTML = `
-        <input type="checkbox" data-index="${index}" ${todo.done ? 'checked' : ''} />
+        <input type='checkbox' data-index='${index}' ${todo.done ? 'checked' : ''} />
         <label>
             <span>${todo.title}</span>
         </label>
-        <button class="deleteBtn" data-index="${index}">Delete</button>
+        <button class='deleteBtn' data-index='${index}'>Delete</button>
         `
-        todoList.appendChild(li)
-    })
+        todoList.appendChild(li);
+    });
 }
 
 addBtn.addEventListener('click', (event) => {
-    event.preventDefault()
-    if (todoInput.value.trim() !== '') {
-        todos.push({ title: todoInput.value.trim(), done: false })
-        todoInput.value = ''
-        renderTodos()
+    event.preventDefault();
+    if(todoInput.value.trim() !== ''){
+        todos.push({
+            title: todoInput.value.trim(),
+            done: false
+        });
+        todoInput.value = '';
+        renderTodos();
     }
-})
+});
 
 todoList.addEventListener('click', (event) => {
-    if (event.target.classList.contains('deleteBtn')) {
-        const index = event.target.getAttribute('data-index')
-        todos.splice(index, 1)
-        renderTodos()
-    } else if (event.target.tagName === 'INPUT') {
-        const index = event.target.getAttribute('data-index')
-        todos[index].done = event.target.checked
-        renderTodos()
+    if(event.target.classList.contains('deleteBtn')){
+        const index = event.target.getAttribute('data-index');
+        todos.splice(index, 1);
+        renderTodos();
+    }else if(event.target.tagName === 'INPUT'){
+        const index = event.target.getAttribute('data-index');
+        todos[index].done = event.target.checked;
+        renderTodos();
     }
-})
+});
 
 saveBtn.addEventListener('click', () => {
     ipcRenderer.send('save-tasks', todos);
@@ -58,21 +61,21 @@ ipcRenderer.on('tasks-loaded', (event, tasks) => {
     renderTodos();
 });
 
-ipcRenderer.on('load-error', (event, errorMessage) => {
-    showErrorBox(errorMessage);
+ipcRenderer.on('load-error', (event, errMsg) => {
+    showErrBox(errMsg);
 });
 
-ipcRenderer.on('app-quit', () => {
-    console.log('App quit event received!')
+ipcRenderer.on('app-quit', ()=> {
+    console.log('App is quitting...');
 })
 
-function showErrorBox(message) {
-    const errorBox = document.createElement('div');
-    errorBox.className = 'error-box';
-    errorBox.textContent = message;
-    document.body.appendChild(errorBox);
+function showErrBox(msg){
+    const errBox = document.createElement('div');
+    errBox.className = 'errBox';
+    errBox.textContent = msg;
 
+    document.body.appendChild(errBox);
     setTimeout(() => {
-        errorBox.remove();
-    }, 5000); // Remove the error box after 5 seconds
+        errBox.remove();
+    }, 5000); // Remove after 5 seconds. 1000 = 1 second
 }
